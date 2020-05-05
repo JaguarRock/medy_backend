@@ -14,6 +14,7 @@ let medicineBagSchema = new Schema({
 }, {
     collection: 'medicineBag'
 })
+// 촐이 갓갓
 
 module.exports = mongoose.model('Student', medicineBagSchema);
 // chori god!!
