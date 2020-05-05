@@ -1,64 +1,52 @@
-let mongoose = require('mongoose'), // refactoring
-    express = require('express'),
-    router = express.Router();
+const router = require('express').Router();
+let MedicineBag = require('../Models/medicineBag');
 
-let studentSchema = require('../Models/Student');
-
-router.route('/create-student').post((req, res, next) => {
-    studentSchema.create(req.body, (error, data) => {
-        if (error) {
-            return next(error)
-        } else {
-            console.log(data)
-            res.json(data)
-        }
-    })
+router.route('/').get((res, res) => {
+    MedicineBag.find()
+        .then(medicineBag => res.json(medicineBag))
+        .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/').get((req, res) => {
-    studentSchema.find((error, data) => {
-        if (error) {
-            return next(error)
-        } else {
-            res.json(data)
-        }
-    })
+router.route('/add').post((req, res) => {
+    const bag_id = req.body.bag_id;
+    const bag_name = req.body.bag_name;
+    const bag_consist = Number(req.body.bag_consist);
+
+    const newMedicineBag = new MedicineBag({
+        bag_id,
+        bag_name,
+        bag_consist,
+    });
+
+    newMedicineBag.save()
+        .then(() => res.json('medicineBag added!'))
+        .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/edit-student/:id').get((req ,res, next) => {
-    studentSchema.findById(req.params.id, (error, data) => {
-        if (error) {
-            return next(error)
-        } else {
-            res.json(data)
-        }
-    })
+router.route('/:id').get((req, res) => {
+    MedicineBag.findById(req.params.id)
+        .then(medicineBag => res.json(medicineBag))
+        .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/update-student/:id').put((req, res, next) => {
-    studentSchema.findByIdAndUpdate(req.params.id, {
-        $set: req.body
-    }, (error, data) => {
-        if (error) {
-            return next(error);
-            console.log(error)
-        } else {
-            res.json(data)
-            console.log('Student updated successfully !')
-        }
-    })
-})
+router.route('/:id').delete((req, res) => {
+    MedicineBag.findByIdAndDelete(req.params.id)
+        .then(() => res.json('MedicineBag deleted'))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
 
-router.route('/delete-student/:id').delete((req, res, next) => {
-    studentSchema.findByIdAndRemove(req.params.id, (error, data) => {
-        if (error) {
-            return next(error);
-        } else {
-            res.status(200).json({
-                msg: data
-            })
-        }
-    })
+router.route('/update/:id').post((req, res) => {
+    MedicineBag.findById(req.params.id)
+        .then(medicineBag => {
+            medicineBag.bag_id = req.body.bag_id;
+            medicineBag.bag_name = req.body.bag_name;
+            medicineBag.bag_consist = Number(req.body.bag_consist);
+
+            medicineBag.save()
+                .then(() => res.json("MedicineBag updated!"))
+                .catch(err => res.status(r00).json('Error: ' + err));
+        })
+        .catch(err => res.status(r00).json('Error: ' + err));
 });
 
 module.exports = router;
