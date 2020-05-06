@@ -2,19 +2,20 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let medicineBagSchema = new Schema({
-    id : {
-        type: Number
+    id: {
+        type: Number, required: true
     },
-    bagName : {
-        type: String
+    bagName: {
+        type: String, required: true
     },
     bagConsist: {
-        type: String
+        type: String, required: true
     }
 }, {
     collection: 'medicineBag'
-})
-// 촐이 갓갓
+});
 
-module.exports = mongoose.model('Student', medicineBagSchema);
-// chori god!!
+const MedicineBag = mongoose.model('MedicineBag', medicineBagSchema);
+
+module.exports = MedicineBag;
+
