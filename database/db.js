@@ -1,2 +1,4 @@
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://MEDY:1234@cluster0-jd7kg.mongodb.net/test?retryWrites=true&w=majority');
+
+module.exports = {
+    db: 'mongodb+srv://inchoir:dlscjf12@cluster0-arncj.mongodb.net/test?retryWrites=true&w=majority'
+};

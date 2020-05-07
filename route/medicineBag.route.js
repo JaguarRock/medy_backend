@@ -1,7 +1,7 @@
 const router = require('express').Router();
 let MedicineBag = require('../Models/medicineBag');
 
-router.route('/').get((res, res) => {
+router.route('/').get((req, res) => {
     MedicineBag.find()
         .then(medicineBag => res.json(medicineBag))
         .catch(err => res.status(400).json('Error: ' + err));
