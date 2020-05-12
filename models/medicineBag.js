@@ -3,13 +3,13 @@ const Schema = mongoose.Schema;
 
 let medicineBagSchema = new Schema({
     id: {
-        type: Number, required: true
+        type: String, requied : true 
     },
     bagName: {
-        type: String, required: true
+        type: String,  requied : true 
     },
     bagConsist: {
-        type: String, required: true
+        type: String,  requied : true 
     }
 }, {
     collection: 'medicineBag'

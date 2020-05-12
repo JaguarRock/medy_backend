@@ -8,14 +8,14 @@ router.route('/').get((req, res) => {
 });
 
 router.route('/add').post((req, res) => {
-    const bag_id = req.body.bag_id;
-    const bag_name = req.body.bag_name;
-    const bag_consist = Number(req.body.bag_consist);
+    const id = req.body.id;
+    const bagName = req.body.bagName;
+    const bagConsist = req.body.bagConsist;
 
     const newMedicineBag = new MedicineBag({
-        bag_id,
-        bag_name,
-        bag_consist,
+        id,
+        bagName,
+        bagConsist,
     });
 
     newMedicineBag.save()
@@ -38,9 +38,9 @@ router.route('/:id').delete((req, res) => {
 router.route('/update/:id').post((req, res) => {
     MedicineBag.findById(req.params.id)
         .then(medicineBag => {
-            medicineBag.bag_id = req.body.bag_id;
-            medicineBag.bag_name = req.body.bag_name;
-            medicineBag.bag_consist = Number(req.body.bag_consist);
+            medicineBag.id = req.body.id;
+            medicineBag.bagName = req.body.bagName;
+            medicineBag.bagConsist = req.body.bagConsist;
 
             medicineBag.save()
                 .then(() => res.json("MedicineBag updated!"))
