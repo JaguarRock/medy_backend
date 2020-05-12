@@ -20,7 +20,7 @@ connection.once('open', () => {
     console.log("MongoDB database connection established successfully");
 })
 
-const medicineBagRouter = require('../backend/routes/student.route');
+const medicineBagRouter = require('../medy_backend/route/medicineBag.route');
 
 app.use('/medicineBag', medicineBagRouter);
 
