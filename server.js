@@ -21,9 +21,12 @@ connection.once('open', () => {
 })
 
 const medicineBagRouter = require('../medy_backend/route/medicineBag.route');
+const hospitalRouter = require('../medy_backend/route/hospital.route');
 
 app.use('/medicineBag', medicineBagRouter);
+app.use('/hospital', hospitalRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
 });
+
