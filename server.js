@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 const uri = process.env.ATLAS_URI;
-mongoose.connect(uri, { useNewUrlParser : true, useCreateIndex : true }
+mongoose.connect(uri, { useNewUrlParser : true, useCreateIndex : true, useUnifiedTopology: true }
 );
 const connection = mongoose.connection;
 connection.once('open', () => {
@@ -23,6 +23,7 @@ const userRouter = require('./route/user.route');
 const medicineBagRouter = require('../medy_backend/route/medicineBag.route');
 
 app.use('/medicineBag', medicineBagRouter);
+app.use('/user', userRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
