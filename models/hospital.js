@@ -2,32 +2,29 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let hospitalSchema = new Schema({
-    hospital_id: {
-        type: String, requied : true 
+    id: {
+        type: String 
     },
-    hospital_password: {
-        type: String,  requied : true 
+    password: {
+        type: String
     },
-    hospital_name: {
-        type: String,  requied : true 
+    name: {
+        type: String
     },
-    hospital_doctor_name: {
-        type: String, required : true
+    doctor: {
+        type: String
     },
-    hospital_address: {
-        type : String, required : true
+    address: {
+        type : String
     },
-    hospital_phone_num: {
-        type : String, required : true
+    phoneNum: {
+        type : String
     },
-    hospital_kinds: {
-        type : String, required : true
+    kinds: {
+        type : String
     },
-    hospital_operating_time: {
-        type : String, required : true
-    },
-    hospital_user_email: {
-        type: String, required : true
+    email: {
+        type: String
     }
 }, {
     collection: 'hospital'

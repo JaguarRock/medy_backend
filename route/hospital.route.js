@@ -7,30 +7,25 @@ router.route('/').get((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/add').post((req, res) => {
-    const hospital_id = req.body.hospital_id;
-    const hospital_password = req.body.hospital_password;
-    const hospital_name = req.body.hospital_name;
-    const hospital_doctor_name = req.body.hospital_doctor_name;
-    const hospital_address = req.body.hospital_address;
-    const hospital_phone_num = req.body.hospital_phone_num;
-    const hospital_kinds = req.body.hospital_kinds;
-    const hospital_operating_time = req.body.hospital_operating_time;
-    const hospital_user_email = req.body.hospital_user_email;
-
-    
-    
+router.route('/register').post((req, res) => {
+    const id = req.body.id;
+    const password = req.body.password;
+    const name = req.body.name;
+    const doctor = req.body.doctor;
+    const address = req.body.address;
+    const phoneNum = req.body.phoneNum;
+    const kinds = req.body.kinds;
+    const email = req.body.email;
 
     const newHospital = new hospital({
-        hospital_id,
-        hospital_password,
-        hospital_name,
-        hospital_doctor_name,
-        hospital_address,
-        hospital_phone_num,
-        hospital_kinds,
-        hospital_operating_time,
-        hospital_user_email
+        name,
+        id,
+        password,
+        doctor,
+        address,
+        phoneNum,
+        kinds,
+        email
     });
 
     newHospital.save()
