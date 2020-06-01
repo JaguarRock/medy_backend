@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
 require('dotenv').config();
 
@@ -9,15 +10,18 @@ const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const uri = process.env.ATLAS_URI;
-mongoose.connect(uri, { useNewUrlParser : true, useCreateIndex : true, useUnifiedTopology: true }
+
+mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }
 );
+
 const connection = mongoose.connection;
 connection.once('open', () => {
     console.log("MongoDB database connection established successfully");
 })
- 
+
 const userRouter = require('./route/user.route');
 const medicineBagRouter = require('../medy_backend/route/medicineBag.route');
 const hospitalRouter = require('../medy_backend/route/hospital.route');

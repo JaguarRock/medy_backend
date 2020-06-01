@@ -1,37 +1,67 @@
 const router = require('express').Router();
-let hospital = require('../models/hospital');
+const hospital = require('../models/hospital');
+const { registerValidation, loginValidation } = require('../validation');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const verify = require('./verifyToken');
 
-router.route('/').get((req, res) => {
+router.get('/', verify, (req, res) => {
     hospital.find()
         .then(hospital => res.json(hospital))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/register').post((req, res) => {
-    const id = req.body.id;
-    const password = req.body.password;
-    const name = req.body.name;
-    const doctor = req.body.doctor;
-    const address = req.body.address;
-    const phoneNum = req.body.phoneNum;
-    const kinds = req.body.kinds;
-    const email = req.body.email;
+router.route('/register').post(async (req, res) => {
 
-    const newHospital = new hospital({
-        name,
-        id,
-        password,
-        doctor,
-        address,
-        phoneNum,
-        kinds,
-        email
+    const { error } = registerValidation(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    const idExist = await hospital.findOne({ id: req.body.id });
+    if (idExist) return res.status(400).send('ID already exists');
+
+    //Hash Passwords
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+    //Create New user
+    const Hospital = new hospital({
+        id: req.body.id,
+        password: hashedPassword,
+        name: req.body.name,
+        doctor: req.body.doctor,
+        address: req.body.address,
+        phoneNum: req.body.phoneNum,
+        kinds: req.body.kinds,
+        email: req.body.email
     });
 
-    newHospital.save()
-        .then(() => res.json('hospital added!'))
-        .catch(err => res.status(400).json('Error: ' + err));
+    try {
+        const newHospital = await Hospital.save();
+        console.log('hospital reigstered');
+        res.send(newHospital);
+    } catch (err) {
+        res.status(400).send(err);
+    }
 });
+
+
+router.route('/login').post(async (req, res) => {
+    const { error } = loginValidation(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    // Checking if the ID exists
+    const user = await hospital.findOne({ id: req.body.id });
+    if (!user) return res.status(400).send('ID is not found');
+
+    // Password is Correct
+    const validPass = await bcrypt.compare(req.body.password, user.password);
+    if (!validPass) return res.status(400).send('Invalid password')
+
+    //Create and assign a token
+    const token = jwt.sign({ id: user.id }, process.env.TOKEN_SECRET);
+    res.header('auth-token', token).send(token);
+
+})
 
 router.route('/:id').get((req, res) => {
     hospital.findById(req.params.id)
@@ -48,19 +78,15 @@ router.route('/:id').delete((req, res) => {
 router.route('/update/:id').post((req, res) => {
     hospital.findById(req.params.id)
         .then(hospital => {
-    
-    
             hospital.hospital_id = req.body.hospital_id;
             hospital.hospital_password = req.body.hospital_password;
             hospital.hospital_name = req.body.hospital_name;
-            hospital.hospital_doctor_name=req.body.hospital_doctor_name;
+            hospital.hospital_doctor_name = req.body.hospital_doctor_name;
             hospital.hospital_address = req.body.hospital_address;
             hospital.hospital_phone_num = req.body.hospital_phone_num;
             hospital.hospital_kinds = req.body.hospital_kinds;
             hospital.hospital_operating_time = req.body.hospital_operating_time;
             hospital.hospital_user_email = req.body.hospital_user_email;
-
-        
 
             hospital.save()
                 .then(() => res.json("hospital updated!"))
