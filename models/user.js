@@ -8,12 +8,12 @@ const userSchema = new Schema({
         trim : true,
         minlength : 5
     },
-    users_name:{
-        type : String,
-        required : true,
-        unique : false,
-        trim : true,
-        minlength : 3
+    users_name: {
+        type: String,
+        required: true,
+        unique: false,
+        trim: true,
+        minlength: 3
     },
     users_password:{
         type : String,
@@ -48,9 +48,9 @@ const userSchema = new Schema({
         trim : true
     }
 }, {
-    timestamps : true,
+    timestamps: true,
 });
 
-const User = mongoose. model('User', userSchema);
+const User = mongoose.model('User', userSchema);
 module.exports = User;
 //users_email, users_name, users_password, users_sex, users_disease, users_drink, users_smoke, users_disease_array

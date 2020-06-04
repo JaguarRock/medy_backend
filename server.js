@@ -23,7 +23,7 @@ const connection = mongoose.connection;
 connection.once('open', () => {
     console.log("MongoDB database connection established successfully");
 })
- 
+
 const userRouter = require('./route/user.route');
 app.use(passport.initialize());
 require('./config/passport')(passport)
@@ -31,4 +31,4 @@ app.use('/user.route', userRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
-}); 
+});
