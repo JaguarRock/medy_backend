@@ -1,7 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const passport =  require('passport');
 const bodyParser = require('body-parser');
+
 
 require('dotenv').config();
 
@@ -9,13 +11,13 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(cors());
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended:false}));//
+//app.use(bodyParser.json());
 
 const uri = process.env.ATLAS_URI;
-
-mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }
-);
+mongoose.connect(uri, { useNewUrlParser : true, useCreateIndex : true });
 
 const connection = mongoose.connection;
 connection.once('open', () => {
@@ -23,12 +25,9 @@ connection.once('open', () => {
 })
 
 const userRouter = require('./route/user.route');
-const medicineBagRouter = require('../medy_backend/route/medicineBag.route');
-const hospitalRouter = require('../medy_backend/route/hospital.route');
-
-app.use('/medicineBag', medicineBagRouter);
-app.use('/user', userRouter);
-app.use('/hospital', hospitalRouter);
+app.use(passport.initialize());
+require('./config/passport')(passport)
+app.use('/user.route', userRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);

@@ -1,5 +1,11 @@
+<<<<<<< HEAD
+# dependencies
+/node_modules
+node_modules
+=======
 #dependencies
 node_modules/**/*
 .env
 # macOS
 .DS_Store
+>>>>>>> 3970efa53d9b330941ef9aaf4cbc08d5e7d67a7d
