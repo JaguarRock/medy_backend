@@ -5,15 +5,15 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const verify = require('./verifyToken');
 
-router.get('/', verify, (req, res) => {
+router.get('/', (req, res) => {
     hospital.find()
         .then(hospital => res.json(hospital))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
 router.route('/register').post(async (req, res) => {
-
     const { error } = registerValidation(req.body);
+
     if (error) return res.status(400).send(error.details[0].message);
 
     const idExist = await hospital.findOne({ id: req.body.id });
@@ -22,7 +22,6 @@ router.route('/register').post(async (req, res) => {
     //Hash Passwords
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
     //Create New user
     const Hospital = new hospital({
         id: req.body.id,
@@ -35,13 +34,15 @@ router.route('/register').post(async (req, res) => {
         email: req.body.email
     });
 
-    try {
-        const newHospital = await Hospital.save();
-        console.log('hospital reigstered');
-        res.send(newHospital);
-    } catch (err) {
-        res.status(400).send(err);
-    }
+    // try {
+    //     await Hospital.save();
+    //     console.log('hospital reigstered');
+    // } catch (err) {
+    //     res.status(400).send(err);
+    // }
+    Hospital.save()
+        .then(() => res.json('medicineBag added!'))
+        .catch(err => res.status(400).json('Error: ' + err));
 });
 
 
@@ -59,7 +60,7 @@ router.route('/login').post(async (req, res) => {
 
     //Create and assign a token
     const token = jwt.sign({ id: user.id }, process.env.TOKEN_SECRET);
-    res.header('auth-token', token).send(token);
+    res.header("x-access-token", token).send(user);
 
 })
 
