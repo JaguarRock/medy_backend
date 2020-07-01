@@ -27,12 +27,14 @@ connection.once('open', () => {
 const userRouter = require('./route/user.route');
 const medicineBagRouter = require('./route/medicineBag.route');
 const hosptialRouter = require('./route/hospital.route');
+const openRouter = require('./route/open.route');
 
 app.use(passport.initialize());
 app.use('/medicineBag', medicineBagRouter);
 require('./config/passport')(passport)
 app.use('/user.route', userRouter);
 app.use('/hospital', hosptialRouter);
+app.use('/open', openRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
